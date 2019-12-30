@@ -124,8 +124,7 @@ let resolvers = {
     forums: ()=> {
         let _user = ''
         
-
-        // loop forum and iuser data
+        // loop forum and insert data
         forumData.map(
             (eachForum) => {
                 _user = userData.find(el => el.id == eachForum.userId)

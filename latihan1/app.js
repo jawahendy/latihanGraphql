@@ -52,6 +52,22 @@
 //     }
 // }
 
+// for mutation or push in rest in graphql
+// mutation {
+//     addUser(id: "4", name: "hendy aja"){
+//       name
+//     }
+// }
+
+// for mutation add forum call in graphi
+// mutation {
+//     addForum(id: "4", title: "Book kece", desc: "ini book kece", userId: "3"){
+//       title
+//       desc
+//     }
+// }
+  
+
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
@@ -89,6 +105,10 @@ let schema = buildSchema(`
             forums: [Forum],
             user(id: ID!): User,
             users: [User]
+        }
+        type Mutation {
+            addUser(id: ID, name: String) : User,
+            addForum(id: ID, title: String, desc: String, userId: String) : Forum
         }
 `)
 
@@ -132,7 +152,29 @@ let resolvers = {
             }
         )
         return userData
+    },
+
+    //for mutation user
+    addUser: ({id, name}) => {
+        let _newUser = { id: id, name: name}
+        userData.push(_newUser)
+        console.log('--------')
+        console.log(userData)
+        console.log('--------')
+
+        return _newUser
+    },
+
+    // for mutation forum
+    addForum: ({id, title, desc, userId}) => {
+        let _newForum = { id: id, title: title, desc: desc, userId: userId}
+        forumData.push(_newForum)
+        console.log('--------')
+        console.log(forumData)
+        console.log('--------')
+        return _newForum
     }
+
 }
 
 app.use('/graphql', graphqlHTTP({

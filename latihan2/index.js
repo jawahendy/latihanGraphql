@@ -13,7 +13,7 @@ mongoose.connect('mongodb://localhost:27017/graphql-lat1');
 
 app.use('/graphql', graphqlHTTP({
     schema,
-    graphiql: true
+    graphiql: true//untuk gui
 }))
 
 app.listen(4000, ()=>{

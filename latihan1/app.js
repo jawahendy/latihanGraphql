@@ -2,6 +2,7 @@
 // npm init
 // npm install express express-graphql graphql --save
 // server run in http://localhost:4000/graphql
+// npm install mangoose --save for mongo db
 
 // call in graphi
 // {
@@ -71,9 +72,11 @@
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
-
+const cors = require('cors')
 
 const app = express()
+app.use(cors())
+
 
 let forumData = [
     { id: "1", title: "cara belajar", desc:"belajar graphql", userId: "1"},

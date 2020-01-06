@@ -8,8 +8,36 @@ import User from './components/user'
 import Form from './components/Form'
 
 
+const resolvers = {
+  User: {
+    isActive: parent => {
+      const activeUsers = JSON.parse(localStorage.getItem('activeUsers')) || [] 
+      return activeUsers.includes(parent.id)
+    }
+  },
+  Mutation: {
+    updateUserActive: (_ , variables, {getCacheKey, cache}) => {
+      const activeUsers = JSON.parse(localStorage.getItem('activeUsers')) || []
+      
+      if(variables.isActive){
+        localStorage.setItem("activeUsers",
+                            JSON.stringify(activeUsers.concat([variables.id]))
+                            )
+      } else {
+        localStorage.setItem("activeUsers",
+                              JSON.stringify(activeUsers.filter( userId => userId != [variables.id]))
+                            )
+      }
+    }
+  }
+}
+
+
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql"
+  uri: "http://localhost:4000/graphql",
+  clientState: {
+    resolvers // client site have 3 : default, resolvers and typeDef
+  }
 });
 
 function App() {

@@ -2,7 +2,9 @@ import gql from "graphql-tag";
 
 export default gql`{
     users{
+        id
         name
+        isActive @client
     }
 }
 `

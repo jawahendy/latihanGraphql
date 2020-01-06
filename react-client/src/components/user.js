@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
-import { Query } from 'react-apollo'
+import { Query , Mutation} from 'react-apollo'
 import usersQuery from '../queries/usersQuery'
+import gql from "graphql-tag"
+
+
+const UPDATE_ACTIVE_USER = gql `
+        mutation updateUserActive($id: ID!, $isActive: Boolean!){
+            updateUserActive(id: $id, isActive: $isActive) @client
+        }`
 
 const User = () => (
     <Query query = {usersQuery}>  
@@ -8,9 +15,28 @@ const User = () => (
                 if(loading) return <p>Loading...</p>
                 if(error) return <p>Ups, ada Eror</p>
 
-                return data.users.map(({ name }) =>(
+                return data.users.map(({ id, name, isActive}) =>(
                     <div key="name">
-                        <p>{name}</p>
+                        <p>{id} - {name}- </p>
+                        <Mutation 
+                                mutation = {UPDATE_ACTIVE_USER}
+                                refetchQueries = {[
+                                    {
+                                        query: usersQuery
+                                    }
+                                ]}>
+                            {(updateUserActive, {loading, error}) =>(
+                                <button onClick={()=>
+                                    updateUserActive({
+                                        variables: {
+                                            id,
+                                            isActive: !isActive
+                                        }
+                                    })
+                                }>{isActive ? "😃" : "😘" }</button>
+                            )}
+
+                        </Mutation>
                     </div>
                 ))
             }}
